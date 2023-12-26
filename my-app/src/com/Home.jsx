@@ -10,11 +10,19 @@ import { MdDeleteForever } from "react-icons/md";
 
 
 const Home = () => {
-  const [task, stateTask] = useState("")
+  const [task, setTask] = useState("")
+  const [newTask, setNewTask] = useState([])
 
 
   const addTask = () => {
     console.log("addTask")
+    if (!task) {
+      alert("Please enter a task")
+    } else {
+      setNewTask([...newTask, task])
+      setTask("")
+    }
+
   }
   const editTask = () => {
     console.log("editTask")
@@ -32,12 +40,27 @@ const Home = () => {
             </h1>
 
           </div>
-          <input className='Home-inp' placeholder='Add your daily task'></input>
-          <div className='Home-showData'></div>
+          <input className='Home-inp' placeholder='Add your daily task' value={task} onChange={(e) => {
+            setTask(e.target.value)
+          }} /> <AiOutlinePlusCircle onClick={addTask} />
+          <div className='Home-showData'>
+
+          {
+            newTask.map((ele,ind)=>{
+                return(
+                  <div className='Home-Todo-item' key={ind}>
+                  <h3>{ele}</h3>
+    
+                </div>
+                )
+            })
+          }
+            
+          </div>
           <div className='Home-btn'>
-            <AiOutlinePlusCircle onClick={addTask} />
-            <FaEdit onClick={editTask} />
             <MdDeleteForever onClick={deleteTask} />
+            <FaEdit onClick={editTask} />
+
           </div>
         </div>
       </div>
