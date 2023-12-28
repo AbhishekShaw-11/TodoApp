@@ -29,6 +29,7 @@ const Home = () => {
   }
   const deleteTask = () => {
     console.log("deleteTask")
+    setTask("")  
   }
   return (
     <React.Fragment>

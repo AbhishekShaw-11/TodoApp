@@ -41,8 +41,8 @@
   align-items: center;
   border-radius: 1rem;
   width: 15rem;
-  height: 2.5rem;
-  display: flex;
+  height: auto;
+
   justify-content: center;
   margin-left: 17rem;
 
