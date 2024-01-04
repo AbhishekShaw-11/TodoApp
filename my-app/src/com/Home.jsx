@@ -15,7 +15,7 @@ const Home = () => {
 
 
   const addTask = () => {
-    console.log("addTask")
+
     if (!task) {
       alert("Please enter a task")
     } else {
@@ -29,7 +29,7 @@ const Home = () => {
   }
   const deleteTask = () => {
     console.log("deleteTask")
-    setTask("")  
+    setTask("")
   }
   return (
     <React.Fragment>
@@ -43,25 +43,32 @@ const Home = () => {
           </div>
           <input className='Home-inp' placeholder='Add your daily task' value={task} onChange={(e) => {
             setTask(e.target.value)
-          }} /> <AiOutlinePlusCircle onClick={addTask} />
+          }} />
+          <input className='Home-inp' placeholder='Describe your task' />
+
+          <AiOutlinePlusCircle onClick={addTask} />
           <div className='Home-showData'>
 
-          {
-            newTask.map((ele,ind)=>{
-                return(
+            {
+              newTask.map((ele, ind) => {
+                return (
                   <div className='Home-Todo-item' key={ind}>
-                  <h3>{ele}</h3>
-    
-                </div>
+                    <h3>{ele}</h3>
+
+                  </div>
                 )
-            })
-          }
-            
+              })
+            }
+
           </div>
           <div className='Home-btn'>
             <MdDeleteForever onClick={deleteTask} />
             <FaEdit onClick={editTask} />
 
+          </div>
+          <div className='Home-Taskcompleted'>
+            <button type="button">Task</button>
+            <button type="button">Completed</button>
           </div>
         </div>
       </div>
