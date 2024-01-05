@@ -1,35 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react'
 import './Home.css';
 import Time from './Time';
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaCheck } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import { } from "react-icons/fa";
 
 
 
 
 const Home = () => {
-  const [task, setTask] = useState("")
+  const [complete, setComplete] = useState(false)
   const [newTask, setNewTask] = useState([])
+  const [task, setTask] = useState("")
+  
 
 
   const addTask = () => {
+    var newTodo = {
+      tas: task,
+      
+    };
 
-    if (!task) {
-      alert("Please enter a task")
+    if (!task ) {
+      alert("Please enter a task ")
     } else {
-      setNewTask([...newTask, task])
-      setTask("")
+      let update = [...newTask];
+      update.push(newTodo);
+      setNewTask(update);
+      localStorage.setItem('todo', JSON.stringify(update));
+      setTask("");
+      
     }
 
   }
+
+  useEffect(() => {
+    var save = JSON.parse(localStorage.getItem('todo'));
+    if (save) {
+      setNewTask(save);
+    }
+  }, [])
   const editTask = () => {
     console.log("editTask")
   }
-  const deleteTask = () => {
-    console.log("deleteTask")
-    setTask("")
+  const deleteTask = (ind) => {
+    
+    newTodo.splice(ind,1)
+ localStorage.setItem("todo",JSON.stringify(newTodo))
+    setNewTask(newTodo)
   }
   return (
     <React.Fragment>
@@ -44,7 +64,6 @@ const Home = () => {
           <input className='Home-inp' placeholder='Add your daily task' value={task} onChange={(e) => {
             setTask(e.target.value)
           }} />
-          <input className='Home-inp' placeholder='Describe your task' />
 
           <AiOutlinePlusCircle onClick={addTask} />
           <div className='Home-showData'>
@@ -53,22 +72,27 @@ const Home = () => {
               newTask.map((ele, ind) => {
                 return (
                   <div className='Home-Todo-item' key={ind}>
-                    <h3>{ele}</h3>
+                    <div className='Home-Todo'>
+                      <h3>{ele.tas}</h3>
+                      </div>
 
+                    <div className='Home-btn'>
+                      <MdDeleteForever onClick={deleteTask} className='del' />
+                      <FaEdit onClick={editTask} className='edit' />
+                  
+                    </div>
                   </div>
                 )
               })
             }
 
           </div>
-          <div className='Home-btn'>
-            <MdDeleteForever onClick={deleteTask} />
-            <FaEdit onClick={editTask} />
 
-          </div>
           <div className='Home-Taskcompleted'>
-            <button type="button">Task</button>
-            <button type="button">Completed</button>
+            <button type="button" className={`taskbtn ${complete === false && 'active'}`}
+              onClick={() => setComplete(false)} >Task</button>
+            <button type="button" className={`taskbtn ${complete === true && 'active'}`}
+              onClick={() => setComplete(true)}>Completed</button>
           </div>
         </div>
       </div>

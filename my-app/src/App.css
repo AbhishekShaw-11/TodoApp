@@ -28,22 +28,47 @@
 
 .Home-btn {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   width: 10rem;
   align-items: center;
-  height: 2rem;
-  margin-left: 40%;
-  margin-right: 45%;
+  height: 5rem;
+ 
 }
+.del:hover{
+  color: rgb(239, 53, 53);
+  cursor: pointer; 
+}
+.edit:hover{
+  color: darkgrey;
+  cursor: grab;
+}
+.check:hover{
+color: aqua;
 
+}
 .Home-showData {
-  border: 1px solid rgb(226, 13, 216);
-  align-items: center;
+  justify-content: space-between;
+   margin-left: 5rem; 
+   margin-right: 5rem;
+
+}
+.active {
+  background-color: black;
+  color: white;
+
+}
+.Home-Todo{
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+.Home-Todo-item{
   border-radius: 1rem;
-  width: 15rem;
-  height: auto;
-
-  justify-content: center;
-  margin-left: 17rem;
-
+  background-color: rgb(236, 182, 233) ; 
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  width: auto;
 }
