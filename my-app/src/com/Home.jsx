@@ -7,45 +7,83 @@ import { FaEdit, FaCheck } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 
 
+//get the local store
 
+const store = () => {
+  let todos = localStorage.getItem('todo');
 
+  if (todos) {
+    return JSON.parse(localStorage.getItem('todo'));
+  } else {
+    return [];
+  }
+}
 
 const Home = () => {
-  const [complete, setComplete] = useState(false)
-  const [newTask, setNewTask] = useState([])
+  const [edits, setEdits] = useState(true)
+  const [newTask, setNewTask] = useState(store())
   const [task, setTask] = useState("")
-  
-
+  const [editsTask, setEditsTask] = useState(null);
 
   const addTask = () => {
-   
-    if (!task ) {
-      alert("Please enter a task ")
-    } else {
-     setNewTask([...newTask, task])
+
+    if (!task) {
+      // alert("Please enter a task ")
+    }
+    else if (task && !edits) {
+      setNewTask(
+        newTask.map((elem) => {
+          if (elem.id === editsTask) {
+            return { ...elem, name: task }
+          }
+          return elem
+        })
+      )
+      setEdits(true)
+      setTask("");
+      setEditsTask(null)
+    }
+
+    else {
+      const allTasks = { id: new Date().getTime().toString(), name: task }
+      setNewTask([...newTask, allTasks])
       setTask("")
     }
 
   }
+  // edit your task
 
-  const editTask = () => {
-    console.log("editTask")
+  const editTask = (id) => {
+    
+    let newEditTask = newTask.find((ele) => {
+      return id ===  ele.id
+    })
+    console.log(newEditTask)
+    setEdits(false)
+    setTask(newEditTask.name);
+    setEditsTask(id)
   }
 
   //delete task
-  const deleteTask = (id) => {
-  console.log("deleteTask")
+  const deleteTask = (index) => {
+    console.log("deleteTask")
 
-  const reduceItem =newTask.filter((elem,ind)=>{
- return ind !==id
-  })
-   setNewTask(reduceItem)
+    const reduceItem = newTask.filter((elem) => {
+      return index !== elem.id
+    })
+    setNewTask(reduceItem)
   }
-
-  const removeAll=() => {
+  // remove all todo tasks
+  const removeAll = () => {
     setNewTask([]);
   }
-  
+
+  //data to add local storage
+
+  useEffect(() => {
+    localStorage.setItem("todo", JSON.stringify(newTask));
+  }, [newTask]);
+
   return (
     <React.Fragment>
       <div className='Home-main'>
@@ -60,21 +98,24 @@ const Home = () => {
             setTask(e.target.value)
           }} />
 
-          <AiOutlinePlusCircle onClick={addTask} />
+          {
+            edits ? <AiOutlinePlusCircle onClick={addTask} /> : <FaEdit onClick={addTask} className='edit' />
+          }
+
           <div className='Home-showData'>
 
             {
-              newTask.map((ele, ind) => {
+              newTask.map((ele) => {
                 return (
-                  <div className='Home-Todo-item' key={ind}>
+                  <div className='Home-Todo-item' key={ele.id}>
                     <div className='Home-Todo'>
-                      <h3>{ele}</h3>
-                      </div>
+                      <h3>{ele.name}</h3>
+                    </div>
 
                     <div className='Home-btn'>
-                      <MdDeleteForever onClick={()=>deleteTask(ind)} className='del' />
-                      <FaEdit onClick={editTask} className='edit' />
-                  
+                      <MdDeleteForever onClick={() => deleteTask(ele.id)} className='del' />
+                      <FaEdit onClick={() => editTask(ele.id)} className='edit' />
+
                     </div>
                   </div>
                 )
@@ -84,12 +125,7 @@ const Home = () => {
           </div>
 
           <div className='Home-Taskcompleted'>
-            <button type="button" className={`taskbtn ${complete === false && 'active'}`}
-              onClick={() => setComplete(false)} >Task</button>
-            <button type="button" className={`taskbtn ${complete === true && 'active'}`}
-              onClick={() => setComplete(true)}>Completed</button>
-
-              <button onClick={removeAll}>Remove all </button>
+            <button onClick={removeAll}>Remove all </button>
           </div>
         </div>
       </div>
