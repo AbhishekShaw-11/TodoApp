@@ -5,7 +5,7 @@ import Time from './Time';
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { FaEdit, FaCheck } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-import { } from "react-icons/fa";
+
 
 
 
@@ -18,39 +18,34 @@ const Home = () => {
 
 
   const addTask = () => {
-    var newTodo = {
-      tas: task,
-      
-    };
-
+   
     if (!task ) {
       alert("Please enter a task ")
     } else {
-      let update = [...newTask];
-      update.push(newTodo);
-      setNewTask(update);
-      localStorage.setItem('todo', JSON.stringify(update));
-      setTask("");
-      
+     setNewTask([...newTask, task])
+      setTask("")
     }
 
   }
 
-  useEffect(() => {
-    var save = JSON.parse(localStorage.getItem('todo'));
-    if (save) {
-      setNewTask(save);
-    }
-  }, [])
   const editTask = () => {
     console.log("editTask")
   }
-  const deleteTask = (ind) => {
-    
-    newTodo.splice(ind,1)
- localStorage.setItem("todo",JSON.stringify(newTodo))
-    setNewTask(newTodo)
+
+  //delete task
+  const deleteTask = (id) => {
+  console.log("deleteTask")
+
+  const reduceItem =newTask.filter((elem,ind)=>{
+ return ind !==id
+  })
+   setNewTask(reduceItem)
   }
+
+  const removeAll=() => {
+    setNewTask([]);
+  }
+  
   return (
     <React.Fragment>
       <div className='Home-main'>
@@ -73,11 +68,11 @@ const Home = () => {
                 return (
                   <div className='Home-Todo-item' key={ind}>
                     <div className='Home-Todo'>
-                      <h3>{ele.tas}</h3>
+                      <h3>{ele}</h3>
                       </div>
 
                     <div className='Home-btn'>
-                      <MdDeleteForever onClick={deleteTask} className='del' />
+                      <MdDeleteForever onClick={()=>deleteTask(ind)} className='del' />
                       <FaEdit onClick={editTask} className='edit' />
                   
                     </div>
@@ -93,6 +88,8 @@ const Home = () => {
               onClick={() => setComplete(false)} >Task</button>
             <button type="button" className={`taskbtn ${complete === true && 'active'}`}
               onClick={() => setComplete(true)}>Completed</button>
+
+              <button onClick={removeAll}>Remove all </button>
           </div>
         </div>
       </div>
